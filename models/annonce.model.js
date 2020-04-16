@@ -30,7 +30,7 @@ const images = {
 
 const annonceSchema = new Schema({
     nom : {
-        type : Number,
+        type : String,
         required : true,
     },
     prix : {

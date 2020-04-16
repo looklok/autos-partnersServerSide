@@ -1,10 +1,9 @@
 const mongoose = require('mongoose'),
       bcrypt     = require('bcrypt'),
       jwt = require('jsonwebtoken');
-      JWT_SECRET = process.env.JWT_SECRET;
+      
 
 var Schema = mongoose.Schema;
-
 
 const adminSchema = new Schema({
     superAdmin : Boolean,
@@ -31,13 +30,6 @@ const adminSchema = new Schema({
 
 });
 
-adminSchema.set('toJSON', {
-    virtuals: true
-  });
-
-adminSchema.set('toObject', {
-    virtuals: true
-  });
 
 adminSchema.methods.checkPassword = function(password) {
     return bcrypt.compareSync(password, this.motDePasse);
@@ -52,7 +44,7 @@ adminSchema.statics.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 };
 adminSchema.statics.getByToken = function(token, callback){
-    jwt.verify(token, JWT_SECRET, function(err, id){
+    jwt.verify(token, process.env.JWT_SECRET, function(err, id){
       if (err) {
         return callback(err);
       }

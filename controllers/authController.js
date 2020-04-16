@@ -1,5 +1,6 @@
 
 const Admin = require('../models/admin.model')
+const jwt        = require('jsonwebtoken');
 
 
 AuthController = {};
@@ -35,6 +36,14 @@ AuthController.loginWithPassword = function(email, password, callback) {
       }}});
   };
   
+  AuthController.loginWithToken = function(token, callback){
+    jwt.verify(token, process.env.JWT_SECRET, function(err, id){
+      if (err) {
+        return callback(err);
+      }
+      Admin.findOne({_id: id}, callback);
+    });
+  }
 
 
   module.exports = AuthController;
