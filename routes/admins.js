@@ -3,6 +3,8 @@ const Admin = require('../models/admin.model');
 const AuthController = require('../controllers/authController');
 
 getToken=function(req){
+    /*const header = req.headers['authorization'];
+    var token = header.split(' ')[1];*/
     return req.body.token;
 }
 
@@ -14,11 +16,10 @@ estAuthentifie = function(req , res, next){
         }
         if (admin){
             req.admin = admin;
-            console.log(admin)
             return next();
 
         }
-        return res.status(401).send({
+        return res.status(403).send({
           msg : "go away"
         });
 
@@ -33,7 +34,7 @@ router.route('/login').post((req, res)=>{
     if (token){
         AuthController.loginWithToken(token, (err, admin) =>{
             if (err || !admin){
-                res.status(400).send(err);
+                res.status(403).send(err);
             }else{
                 res.send({
                     admin : admin,
@@ -60,7 +61,32 @@ router.route('/login').post((req, res)=>{
 
 router.use(estAuthentifie);
 
+router.route('/password').post((req,res)=>{
+    var token = getToken(req)                   //tu ne peux pas changer que votre mot de passe 
+    var oldPassword = req.body.oldPassword;
+    var newPassword = req.body.newPassword;
 
+    Admin.getByToken(token, (err, admin)=>{
+        if (err){
+             res.status(400).send(err);
+        }
+        if (Admin && admin.checkPassword(oldPassword)){
+            Admin.updateOne({_id : admin._id}, { motDePasse: Admin.generateHash(newPassword)})
+            .then(()=>{
+                res.send({
+                    "message": "mot de passe mis a jour correctement",
+                })
+            }).catch((err)=>{
+                res.status(400).send(err);
+            });
+         
+        }else{
+            res.send({
+                "message": "mot de passe incorrect",
+            })
+        }
+    })
+})
 
 router.post('/addAdmin',
     function (req, res) {
@@ -115,7 +141,7 @@ router.route('/update/:id').put((req, res)=>{
     }).catch(
         (err)=>res.status(400).json(err)
     );
-})
+});
 
 
 module.exports = router;

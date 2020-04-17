@@ -19,7 +19,7 @@ const adminSchema = new Schema({
     motDePasse: {
         type: String,
         required: true,
-        select: false, // for default projection
+       // select: false, // for default projection
       },
     sex : {
         type : String,
