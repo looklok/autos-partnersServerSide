@@ -6,7 +6,6 @@ const jwt        = require('jsonwebtoken');
 AuthController = {};
 
 AuthController.loginWithPassword = function(email, password, callback) {
-    
     Admin.findOne({
         email: email.toLowerCase()
     })

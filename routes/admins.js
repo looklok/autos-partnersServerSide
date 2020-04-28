@@ -32,6 +32,7 @@ router.route('/login').post((req, res)=>{
     var token = getToken(req);
 
     if (token){
+        console.log(email)
         AuthController.loginWithToken(token, (err, admin) =>{
             if (err || !admin){
                 res.status(403).send(err);
@@ -48,6 +49,7 @@ router.route('/login').post((req, res)=>{
             if (err){
                 res.status(400).send(err);
             }else{
+
                 res.send({
                     token : token,
                     admin : admin,
@@ -90,7 +92,6 @@ router.route('/password').post((req,res)=>{
 
 router.post('/addAdmin',
     function (req, res) {
-
       var email = req.body.email;
       var password = req.body.motDePasse;
       var superAdmin =( req.body.superAdmin === 'true');
@@ -125,8 +126,9 @@ router.get('/all',(req, res)=>{
 router.route('/:id').delete(
     (req,res) =>{
         Admin.deleteOne({_id : req.params.id})
-    .then(res.json('admin supprimée'))
-.catch(err=> res.status(400).json(err));});
+        .then(res.json('admin supprimée'))
+        .catch(err=> res.status(400).json(err));}
+);
 
 
 router.route('/update/:id').put((req, res)=>{

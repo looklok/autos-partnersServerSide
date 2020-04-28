@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
     superAdmin : Boolean,
-    name : String,
+    nom : String,
     prenom : String,
     email : String,
     login: {
