@@ -39,7 +39,10 @@ const annonceSchema = new Schema({
     },
     description : String,
     categorie : String,
-    fabriquant : String,
+    fabriquant : {
+        type : String,
+        required : true,
+    },
     miseEnCirculation : String,
     kilometrage : Number,
     nbrPorte : Number,
@@ -50,7 +53,10 @@ const annonceSchema = new Schema({
         }
     },
     version : String,
-    energie : String,
+    energie : {
+        type : String,
+        required : true,
+    },
     couleurExterieure : String,
     premiereMain : Boolean,
     donneesComplementaires : donneesComplementaires,

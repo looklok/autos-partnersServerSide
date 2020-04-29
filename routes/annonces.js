@@ -34,7 +34,19 @@ router.route('/one/:id').get((req, res) =>{
     })
 });
 
-
+router.route('/filtre').get((req, res) =>{
+    var filtre = {}
+    filtre.energie = req.body.energie;
+    if (req.body.prix) filtre.prix = {$lte : Number(req.body.prix)};
+    filtre.fabriquant=req.body.marque;
+    for (critere in filtre) if (!filtre[critere]) delete filtre[critere]
+    
+    Annonce.find(filtre).then((Annonce) =>{
+        res.send(Annonce);
+    }).catch((err)=>{
+        res.status(400).send(err);
+    })
+});
 
 router.post('/add',upload.fields([{ name: 'images' }, { name: 'videos'}]),(req, res)=>{
         
